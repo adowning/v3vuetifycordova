@@ -1,7 +1,22 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import cache from './cache/'
 // const axios = require('axios')
-
+var tokenBaseURL = ''
+var baseURL = ''
+if (process.env.NODE_ENV == 'development') {
+  tokenBaseURL = '/token'
+  baseURL = '/humanity'
+}
+if (process.env.NODE_ENV == 'production') {
+  tokenBaseURL = 'https://www.humanity.com/oauth2/token.php'
+  baseURL = 'https://www.humanity.com/api/v2'
+}
+const AxiosInstanceHumanityToken = axios.create({
+  baseURL: tokenBaseURL
+})
+const AxiosInstanceHumanity = axios.create({
+  baseURL: baseURL
+})
 var token = ''
 
 export async function setToken() {
@@ -13,7 +28,7 @@ export async function setToken() {
     password: 'sugarlips42'
   }
 
-  return await axios.post('/token', options).then(response => {
+  return await AxiosInstanceHumanityToken.post('/', options).then(response => {
     cache.setItem('humanityToken', response.data.access_token)
     console.log(response.data.access_token)
   })
@@ -22,27 +37,27 @@ export async function setToken() {
 
 export async function getClockStatusOf1444044() {
   var token = await cache.getItem('humanityToken')
-  var x = await axios
-    .get('/humanity/timeclocks/status/1444044/1?access_token=' + token)
-    .then(response => {
-      // this.token = response.data.access_token;
-      var string = response.data
-      console.log(string)
-      return string
-    })
+  var x = await AxiosInstanceHumanity.get(
+    '/timeclocks/status/1444044/1?access_token=' + token
+  ).then(response => {
+    // this.token = response.data.access_token;
+    var string = response.data
+    console.log(string)
+    return string
+  })
   return x
 }
 
 export async function clockInUser(empId) {
   var token = await cache.getItem('humanityToken')
-  var x = await axios
-    .post(`/humanity/employees/${empId}/clockin?access_token=` + token)
-    .then(response => {
-      // this.token = response.data.access_token;
-      var string = response.data
-      console.log(string)
-      return string
-    })
+  var x = await AxiosInstanceHumanity.post(
+    `/employees/${empId}/clockin?access_token=` + token
+  ).then(response => {
+    // this.token = response.data.access_token;
+    var string = response.data
+    console.log(string)
+    return string
+  })
   return x
 }
 
@@ -50,8 +65,9 @@ export async function clockOutUser(empId) {
   var token = await cache.getItem('humanityToken')
   console.log(token)
   console.log(empId)
-  var res = await axios
-    .put(`/humanity/employees/${empId}/clockout?access_token=` + token)
+  var res = await AxiosInstanceHumanity.put(
+    `/employees/${empId}/clockout?access_token=` + token
+  )
     .then(response => {
       console.log(response)
       // this.token = response.data.access_token;
