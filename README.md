@@ -1,4 +1,3 @@
-# v3vuetifycordova
 
 ## Project setup
 ```
