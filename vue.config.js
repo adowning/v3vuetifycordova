@@ -20,12 +20,12 @@ module.exports = {
           '^/humanity': ''
         }
       }
+    },
+    port: 2096,
+    https: {
+      key: fs.readFileSync('./certs/cf_mobile.key'),
+      cert: fs.readFileSync('./certs/cf_mobile.pem')
     }
-    // port: 2096,
-    // https: {
-    //   key: fs.readFileSync('./certs/cf_mobile.key'),
-    //   cert: fs.readFileSync('./certs/cf_mobile.pem')
-    // }
   },
   pluginOptions: {
     cordovaPath: 'src-cordova',

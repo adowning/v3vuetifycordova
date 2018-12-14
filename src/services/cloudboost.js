@@ -5,7 +5,7 @@ import cache from './cache'
 import { stringify } from './utility'
 
 CB.CloudApp.init(
-  'https://mobile.ashdevtools.com',
+  'https://api.ashdevtools.com',
   'andrewsDev',
   '85520530-5b9c-4f42-9795-08cdf41a3ece'
 )
